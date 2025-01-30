@@ -1,0 +1,888 @@
+<!DOCTYPE html>
+<html><head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+        <title>CS Club</title>
+        <link rel="preconnect" href="https://fonts.googleapis.com/">
+<link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin="">
+<link href="CS%20Club_files/css2.css" rel="stylesheet">
+    </head>
+    <body>
+<style>
+/*
+CSS goes here. Please format it well and explain the usage if it's complicated.
+*/
+
+#dev-message{
+    position:fixed;
+    top:0px;
+    left:0px;
+    font-size:20px;
+    color:white;
+    background-color:rgba(0,0,0,0.5);
+    opacity:0.7;
+    z-index:1000
+}
+#matterJS{
+    position:fixed;
+    top:0px;
+    left:0px; 
+}
+
+body{
+    background-color:black;
+}
+*{
+    font-family:monospace;
+}
+
+/*The main text element */
+#message{
+    border-radius:10px;
+    background-color:rgba(0,0,0,0.8);
+    position:fixed;
+    display:block;
+    transition: all 0.8s ease-out;
+    color:white;
+    font-size:1.5em;
+    font-family:monospace;
+    padding:20px;
+    box-sizing:border-box;
+}
+
+/*class for highlighted words (in span)*/
+
+.highlight{
+    background-color:rgba(173, 223, 255, 0.5);
+    color:white;
+    border-radius:5px;
+}
+
+/* Base Button Styles */
+button {
+  background-color: #ADDFFF; /* Light blue main color */
+  border: 2px solid #80CFFF; /* Slightly darker blue for the border */
+  color: black; /* White text for contrast */
+  font-family: monospace; /* Clean, modern font */
+  font-size: 20px;
+  font-weight: bold;
+  padding: 10px 20px;
+  border-radius: 8px; /* Rounded corners */
+  cursor: pointer;
+  transition: background-color 0.3s ease, box-shadow 0.3s ease; /* Smooth transitions */
+}
+
+/* Hover State */
+button:hover {
+  background-color: #5eafe0; /* Darker blue on hover */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Subtle shadow for emphasis */
+}
+
+/* Active State */
+button:active {
+  background-color: #5AB8FF; /* Even darker blue on click */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* Reduced shadow */
+  transform: scale(0.98); /* Slightly smaller for a "pressed" effect */
+}
+
+/* Focus State */
+button:focus {
+  outline: none; /* Removes default browser outline */
+  box-shadow: 0 0 0 3px rgba(173, 223, 255, 0.5); /* Light blue outline for accessibility */
+}
+
+/*big number input*/
+.bnI { 
+  width: 65px;
+  overflow: hidden;
+  box-sizing: border-box;
+  display: inline-block;
+  border: 2px solid #007BFF; /* Blue border */
+  background-color: transparent; /* Transparent background */
+  color: #007BFF; /* Blue text */
+  text-align: center; /* Center the text */
+  font-size: 1em; /* Readable font size */
+  border-radius: 5px; /* Rounded corners */
+  outline: none; /* Remove the default focus outline */
+  transition: border-color 0.3s, background-color 0.3s; /* Smooth transitions */
+  font-family:monospace;
+}
+
+.bnI:hover {
+  border-color: #0056b3; /* Darker blue on hover */
+  background-color: rgba(0, 123, 255, 0.1); /* Slightly blue background */
+}
+
+.bnI:focus {
+  border-color: #0056b3; /* Same as hover for focus */
+  background-color: rgba(0, 123, 255, 0.2); /* Slightly more opaque background */
+  box-shadow: 0 0 5px rgba(0, 123, 255, 0.5); /* Subtle glow effect */
+}
+
+
+div.cardHolder {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    gap: 5px;
+    height: 240px;
+    margin: 0;
+    width:calc(60vw-40px);
+}
+
+.card {
+    width: 33%;
+    max-width: 300px;
+    height:120px;
+    outline: 1px solid #3a8fd8;
+    background: linear-gradient(135deg, transparent, rgba(255,255,255,0.05));
+    color: #fff;
+    border-radius: 15px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+    padding: 6px;
+    text-align: center;
+    transform: perspective(1000px);
+    transition: all 0.3s ease;
+    cursor: pointer;
+    position:relative;
+}
+
+.card:hover {
+    box-shadow: 0 12px 30px rgba(255, 255, 255, 0.3);
+    background-color:rgba(58, 143, 216,0.2);
+}
+
+.card h3 {
+    margin: 10px 0;
+    font-size: 1.8rem;
+}
+
+.card p {
+    margin: 0;
+    font-size: 1.2rem;
+    line-height: 1.5;
+}
+.card::before {
+    content: '▼'; /* Unicode arrow symbol */
+    position: absolute; /* Positioning to allow placement in the corner */
+    top: 0; /* Align to the top */
+    right: 0; /* Align to the right */
+    font-size: 1.2em; /* Adjust size as needed */
+    color: #fff; /* Set the color of the arrow */
+    opacity:0;
+    transform: translateY(-0.2em) translateX(-0.2em) rotate(225deg); /* Rotate if needed to match the style */
+    pointer-events: none; /* Ensures the arrow doesn’t interfere with clicks */
+    transition:all 0.2s;
+}
+.card:hover::before{
+    opacity:0.8;
+}
+
+
+dialog {
+    width: 90%;
+    max-width: 600px;
+    border: none;
+    border-radius: 15px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+    padding: 20px;
+    background: linear-gradient(135deg, rgba(0,0,0,0.8), rgba(0,0,0,0.5));
+    color: #fff;
+    outline: 1px solid white;
+    text-align: center;
+    transition:all 0.5s ease-in;
+}
+dialog[open] {
+    animation: fadeIn 0.3s ease-out;
+}
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+dialog::backdrop {
+    background: rgba(0, 0, 0, 0.5);
+    backdrop-filter:blur(3px);
+}
+
+dialog h3 {
+    margin: 0 0 10px;
+    font-size:2rem;
+}
+
+dialog p {
+    margin: 0 0 20px;
+    font-size: 1.5rem;
+    line-height: 1.5;
+}
+
+.button-container {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+}
+
+.button-container button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    background-color: #fff;
+    color: #3a8fd8;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.button-container button:hover {
+    background-color: #e0eefe;
+}
+a{
+    color:lightblue;
+}
+
+</style>
+
+<div id="dev-message">DEVELOPMENT USE</div>
+
+<canvas id="matterJS" width="1280" height="667" style="background: rgb(20, 21, 31) 0% 0% / contain;"></canvas>
+
+<div id="message" style="left: 20vw; width: 60vw; top: 224px;"><span style="font-size:2em">Ever wondered how websites, apps, and games work or want to make them? <span class="highlight">CS Club</span> is for you!</span><br><p style="text-align:center"><button onclick="page(`0.5`)">Tell me more!</button> <button onclick="openDialog(0)">How can I join?</button></p> <div style="width:70px;font-size:10px;color:grey;position:fixed;bottom:0px;right:0px;cursor:pointer;background-color:rgba(0,0,0,0.5)" onclick="openDialog(6)">Contributors</div></div>
+
+<dialog id="modalDialog">
+  <div id="modalContent"></div>
+  <div class="button-container">
+    <button id="closeDialog" onclick="$('modalDialog').close();">Close</button>
+  </div>
+</dialog>
+
+
+<script src="CS%20Club_files/matter.min.js" integrity="sha512-6+7rTBmR6pRFe9fa0vCFjFaHZj/XYa7774bEBzRtxgdpIJOS++R3cKd6Prg/eJmxtsJotd8KAg4g57uuVQsZKA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script>
+/*
+ * Filename: index.html > script
+ * Desc: Does everything to do with JS in the index (start) page.
+ * Contributors: Michael C
+ */
+
+// press ctrl+f and type _ 4 times to skip all of the comments.
+
+
+
+/*
+ * Hello! Welcome to the CS Club's website codebase. 
+ * I'm Michael, and I am currently maintaning the codebase.
+ * If you're here, then you should be trying web design/code/etc whatever.
+ * So here's how this website is structured.
+ * First, we have the global (page-wide) variables and functions all here:
+ */
+if(!window.global) window.global = {};
+/*
+ * If you would like to declare a global variable, 
+ * do `global.name = something`
+ * To do a global function,
+ * do `global.name = ()=>{ function stuff }` or just
+ * define the function outside of any code section.
+ * 
+ * This is to avoid codebase name-clashes, and it 
+ * works with the next organization of this codebase:
+ */
+(function(){
+    // code goes here, in a code "section".
+
+    /*
+     * Inside this code section, all variable 
+     * declarations stay in here. This is a different scope
+     * than the `window` scope, so if you define a 
+     * variable here with `var` or `let` or `const` it 
+     * will not mix with the same variable name elsewhere.
+     * However, try not to make same names (aside from 
+     * one letter names like `var i` and `j`) because
+     * it can be confusing when you are working on
+     * more than one section. However, doing `global.name`
+     * will still create a global variable across the entire
+     * page, even through other scripts. 
+     */
+})();
+/* Also, try to describe and name every section, function, loop, and conditional. 
+ * Thanks! that's it. Start coding (or editing) (or refactoring)! 
+ * 
+ * Some attribution info:
+ * When making big pieces of code, you can put:
+ * // Contributors: names 
+ * // Maintainers: names
+ * and if you are helping edit some code, you can add your name there too.
+ * If you have some code unfinished, put a 
+ * // TODO (name): <what to add/fix>
+ * someone else can help you finish the code or you can do it 
+ * yourself sometime later.
+ */
+
+
+// ____ [skipped]
+
+/* BIG PLANNING AREA THING
+ * Code plan:
+ * 
+ * 
+ */
+
+
+// this declares the function $ to get a string input as an id.
+// you can replace all `document.getElementById()` with `$()`
+$=e=>document.getElementById(e);
+
+
+// Section: hide development message if not dev
+(function(){
+    if(false){
+        $('dev-message').style.display = 'none';
+    }
+})();
+
+
+
+
+// Section: Matter JS Setup
+(function (){
+    
+    // module aliases
+    global.mj = {
+        Engine: Matter.Engine,
+        Render: Matter.Render,
+        Runner: Matter.Runner,
+        Bodies: Matter.Bodies,
+        Composite: Matter.Composite,
+        World: Matter.World,
+        Vector: Matter.Vector,
+        Body: Matter.Body,
+    };
+    
+
+    // create an engine
+    global.engine = global.mj.Engine.create();
+    
+
+
+    global.canvas = $('matterJS');
+
+
+    // create a renderer
+    global.render = global.mj.Render.create({
+        canvas: global.canvas,
+        engine: global.engine,
+        options: {
+            wireframes: false,
+        }
+    });
+
+    // create two boxes and a ground
+    
+    var g0 = global.mj.Bodies.rectangle(window.innerWidth/2, window.innerHeight+1000, window.innerWidth, 2000, { isStatic: true });
+    var g1 = global.mj.Bodies.rectangle(-1000, window.innerHeight/2, 2000, window.innerHeight, { isStatic: true });
+    var g2 = global.mj.Bodies.rectangle(window.innerWidth/2, -1000, window.innerWidth, 2000, { isStatic: true });
+    var g3 = global.mj.Bodies.rectangle(window.innerWidth+1000, window.innerHeight/2, 2000, window.innerHeight, { isStatic: true });
+
+    // add all of the bodies to the world
+    global.mj.Composite.add(global.engine.world, [g0,g1,g2,g3]);
+
+    // Add a mouse to the renderer's canvas
+    const mouse = Matter.Mouse.create(global.render.canvas);
+
+    // Add mouse control for dragging objects
+    const mouseConstraint = Matter.MouseConstraint.create(global.engine, {
+        mouse: mouse,
+        constraint: {
+            stiffness: 0.2, // Adjust the stiffness of dragging
+            render: {
+                visible: false // Set to true if you want to see the dragging constraint
+            }
+        }
+    });
+
+    // Add the mouse constraint to the world
+    global.mj.World.add(global.engine.world, mouseConstraint);
+
+    // Keep the mouse in sync with rendering
+    global.render.mouse = mouse;
+
+
+    // run the renderer
+    global.mj.Render.run(global.render);
+
+    // create runner
+    global.runner = global.mj.Runner.create();
+
+
+
+    // run the engine
+    global.mj.Runner.run(global.runner, global.engine);
+
+    page()
+
+    $('matterJS').width = window.innerWidth;
+    $('matterJS').height = window.innerHeight;
+})();
+
+//Function: changes the text shown in the text box.
+function page(i=0){
+    if(i==0){
+        //add text using the function
+        addMatterText('THIS IS\nCS CLUB!',window.innerWidth/2-(16*5*8/2),20,16,'#333','#ADDFFF',false);
+        //create balls
+        createBallPit(100,0.5,'#ADDFFF');
+        //set gravity to zero
+        global.engine.world.gravity.y = 0;
+        //set message styles
+        $('message').style.left = '20vw';
+        $('message').style.width = '60vw';
+        $('message').style.top = 16*14+'px';
+        //add messasge text
+
+        $('message').innerHTML = '<span style="font-size:2em">Ever wondered how websites, apps, and games work or want to make them? <span class="highlight">CS Club</span> is for you!</span><br><p style="text-align:center"><button onclick="page(`0.5`)">Tell me more!</button> <button onclick="openDialog(0)">How can I join?</button></p> <div style="width:70px;font-size:10px;color:grey;position:fixed;bottom:0px;right:0px;cursor:pointer;background-color:rgba(0,0,0,0.5)" onclick="openDialog(6)">Contributors</div>'
+
+    }else if(i=='0.5'){
+        //fade out text
+        $('message').style.opacity = 0;
+        //set gravity once fade ends
+        setTimeout(()=>{
+            global.engine.world.gravity.y = 1;
+        },800);
+        setTimeout(()=>{
+            explosionEffect();
+        },1100)
+        //change text while hidden and make it fade in again
+        setTimeout(()=>{
+            $('message').innerHTML = `<span style="text-align:center;font-size:2em;width:100%;display:block;text-align:center;line-height:0.2em"><b>Surprise!</b></span><br>
+<span style="color:grey;font-size:0.6em;width:100%;display:block;text-align:center">(Programming languages are suggested)</span><br>
+<div class="cardHolder">
+<div class="card" onclick="openDialog(1)"><h3>Robotics</h3>
+<p>Join us in taking part in the Argonne competition!</p></div>
+<div class="card" onclick="openDialog(2)"><h3>Web Design</h3>
+<p>Build with the team that made this website. <i>Easier; vanilla HTML JS CSS</i></p></div>
+<div class="card" onclick="openDialog(3)"><h3>Game Dev</h3>
+<p>Learn the art of gamemaking, from template to product. <i>Advanced; Unity 3</i></p></div>
+<div class="card" onclick="openDialog(4)"><h3>AI</h3><p>Understand how to build, train, and use AI models. <i>Advanced; Need reading; Python</i></p></div>
+<div class="card" onclick="openDialog(5)"><h3>... And More!</h3>
+<p>Come here to learn and apply programming! We're open to all kinds of projects.</p></div></div><br>
+<br>
+CS Club is open for you, whether you are skill-building, or taking your first steps into coding.  <br>
+Ready to create something amazing? Come to the club!<br>
+<p style="text-align:center"><button onclick="page(2)">Not sure if coding is for you? Give it a try!</button> <button onclick="openDialog(0)">How can I join?</button></p>`
+            //give cards 3d effect
+            const cards = document.querySelectorAll('.card');
+
+            cards.forEach((card) => {
+                card.addEventListener('mousemove', (e) => {
+                const rect = card.getBoundingClientRect();
+                const x = e.clientX - rect.left; // Mouse X relative to the card
+                const y = e.clientY - rect.top; // Mouse Y relative to the card
+
+                const centerX = rect.width / 2;
+                const centerY = rect.height / 2;
+
+                const rotateX = (y - centerY) / 10;
+                const rotateY = (centerX - x) / 6;
+
+                card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+                });
+
+                card.addEventListener('mouseleave', () => {
+                card.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg)';
+                });
+            });
+
+        
+            $('message').style.opacity = 1;
+            
+            setTimeout(()=>{
+                //activate next page
+                page(1)
+            },300)
+        },2400)
+        
+
+    }else if(i==1){
+        //set styles
+
+        $('message').style.left = '5vw';
+        $('message').style.width = '90vw';
+        $('message').style.top = '10px';
+        $('message').style.height = 'auto';
+        
+
+    }else if(i==2){
+        $('message').style.left = '20vw';
+        $('message').style.width = '60vw';
+        //add text and interactive stuff
+        $('message').innerHTML = 'Now it\'s your turn! You can drag objects around. <br><br><br><span style="font-size:2.5em">world.gravity.x = <input id="gravityInputX" class="bnI" value="0"></span><br><br><span style="font-size:2.5em">world.gravity.y = <input id="gravityInputY" class="bnI" value="1"></span><br><br>Try typing -1 or 1.<br><br><p style="text-align:center"><button style="opacity:0;transition:all 0.3s" onclick="page(3)" id="continueButton">Continue</button></p>';
+        //handle input stuff
+        document.getElementById('gravityInputX').addEventListener('input', handleInputNumber);
+        document.getElementById('gravityInputY').addEventListener('input', handleInputNumber);
+
+    }else if(i==3){
+        global.engine.world.gravity.x = 0;
+        global.engine.world.gravity.y = 0;
+        setTimeout(()=>{
+            explosionEffect();
+            setTimeout(()=>{
+                explosionEffect(0.02);
+                let change = 0;
+                setInterval(()=>{
+                    change = (change+1) % 4;
+
+                    if(change == 0){
+                        global.engine.world.gravity.x = -0.01;
+                        global.engine.world.gravity.y = 0.01;
+                    }else if(change == 1){
+                        global.engine.world.gravity.x = 0.01;
+                        global.engine.world.gravity.y = 0.01;
+                    }else if(change == 2){
+                        global.engine.world.gravity.x = 0.01;
+                        global.engine.world.gravity.y = -0.01;
+                    }else if(change == 3){
+                        global.engine.world.gravity.x = -0.01;
+                        global.engine.world.gravity.y = -0.01;
+                    }
+                },10000)
+            },500)
+        },100)
+
+        $('message').innerHTML = '<span style="font-size:3em">Congratulations, you just hacked gravity!</span><br><br>Changing gravity is just the start. At CS Club, we\'ll guide you to build projects you never thought were possible. And trust us—it\'s way more fun than you think! Even if you have no experience, it\'s not a problem: everyone starts somewhere. CS Club is the perfect place to learn and grow at your own pace.<br><br><span style="font-size:1.7em">Come join us afterschool on thursday in room 2503!</span><br><br><span style="color:grey;font-size:0.9em;cursor:pointer" onclick="openDialog(6)">Click to see contributors</span>';
+
+    }
+}
+
+//Function: Handles all modal dialog interactions
+function openDialog(id){
+    content = '';
+    if(id==0){ //Info
+        content = '<h3>Where and when?</h3><p>tldr; Room 2503 Thursdays Afterschool. <br><br>The club is open in room 2503 on Thursdays afterschool, unless it is a short school day or holiday. The club closes at around 5:00 but you don\'t need to stay for the entire time.</p>'
+    }else if(id==1){ //Robotics
+        content = '<h3>Robotics</h3><p>We currently have an Argonne division working on a robot for the compitition. You are welcome to come over and participate, whether with the building or the coding!</p>'
+    }else if(id==2){ //Web Dev
+        content = '<h3>Web Design / Development</h3><p>Come and learn or collaborate on web design! We are open to all project ideas. <br><br><i>Easy; vanilla HTML CSS JS / maybe React/PHP/MySQL/Python if needed; Figma for design.</i></p>'
+    }else if(id==3){ //Game Dev
+        content = '<h3>Game Development</h3><p>You can come here to review/build games - we support many languages. We can also help with introduction to game design and help with the coding. <br><br><i>Harder; Help provided with Unity3; Basic knowledge of programming recommended.</i></p>'
+    }else if(id==4){ //AI
+        content = '<h3>Artificial Intelligence</h3><p>Explore the intricacies of neural networks and work with people on learning, applying, training, or developing AI technologies. <br><br><i>Hard; reading requiered, knowledge of linear algebra recommended; Python</i></p>'
+    }else if(id==5){ //More
+        content = '<h3>... And More!</h3><p>Come here and introduce your own ideas!</p>'
+    }else if(id==6){
+        content = '<h3>Contributors</h3><p>Site mostly coded by The Mathdragon (No names allowed; only psudonyms will be put here), but with help testing and ideas from my friends and classmates, some of whom would like to stay anonymous, but which includes: </p><div style="overflow:scroll;height:72px;font-size:15px;width:50%;background-color:rgba(255,255,255,0.2);position:relative;left:25%;text-align:left;padding-left:10px;padding-right:10px;border-radius:6px">FlappyDrapple (pokenerd),<br>RL,<br>Normie Perspective,<br>and Little Dragon.</div> <p>Also much appreciated is the help from CS Club itself! Anyway, thanks for reading this thing to the end. Have a nice day!<br>And for fun, <a href="javascript:" onclick="$(\'modalDialog\').close();easterEgg(0)">Explosion Effect</a></p>'
+    }
+
+    //set content and show modal!
+    $('modalContent').innerHTML = content;
+    $('modalDialog').showModal();
+}
+
+//Function: Easter Eggs
+function easterEgg(id){
+    if(id==0){
+        explosionEffect(0.08)
+    }else if(id==1){
+        global.fontSwitch = 0;
+        setInterval(()=>{
+            global.fontSwitch = (global.fontSwitch+1)%2;
+            for(let i of document.querySelectorAll('*')){
+                i.style.fontFamily = ['Are You Serious','Cherish'][global.fontSwitch]
+            } 
+
+        },100)
+    }else if(id==2){
+        alert('You have angered the compsci gods.')
+        setTimeout(()=>{
+            let canvas = document.createElement('canvas');
+            canvas.width = canvas.height = 1e4; // Extremely large resolution
+            document.body.appendChild(canvas);
+            let ctx = canvas.getContext('2d');
+            global.crashList = [];
+            setInterval(()=>{
+                ctx.fillStyle = getRandomColor();
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+                global.crashList.push(canvas.toDataURL())
+            },10)
+        },1000)
+    }
+}
+
+
+
+window.onkeydown = (e)=>{
+    //activate easter egg
+    if(e.key==' '){
+        var ans = prompt('Do you like CompSci? [YES/NO]');
+        if(ans!='yes'&&ans!='Yes'&&ans!='true'&&ans!='True'&&ans!='y'&&ans!='Y'&&ans!='YES'&&ans!=undefined&&ans!=''){
+            alert('How dare you?')
+            alert('See the consequences...')
+            easterEgg(1)
+        }
+    }
+}
+
+
+//Function: handles the input for the function.
+function handleInputNumber(event){
+    let input = event.target.value;
+
+    // If input is empty, allow it
+    if (input === "") {
+        return;
+    }
+
+    // Handle moving the minus sign
+    const hasMinus = input.includes("-");
+    if (hasMinus && input.indexOf("-") !== 0) {
+        // Move the minus sign to the start
+        input = "-" + input.replace(/-/g, "");
+    }
+
+    // Replace "-0" with "0"
+    if (input === "-0") {
+        input = "0";
+    }
+
+    //if input is 0### replace with ###
+    if(input.length>1 && input[0]=='0'){
+        input = input.slice(1);
+    }
+
+    // Allow only valid numbers within range
+    if (/^-?\d*$/.test(input)) {
+        let num = parseInt(input, 10);
+
+        // Ensure the value is within the range -3 to 3
+        if (!isNaN(num) && (num < -3 || num > 3)) {
+            input = Math.max(-3, Math.min(3, num)).toString();
+        }
+    } else {
+        // Remove invalid characters
+        input = input.slice(0, -1);
+    }
+
+    // Set the corrected value back to the input field
+    event.target.value = input;
+    // Change the gravity
+    if(!isNaN(input-0)){
+        if(event.target.id.at(-1)=='X'){
+            global.engine.world.gravity.x = input;
+            $('continueButton').style.opacity = 1;
+        }else{
+            global.engine.world.gravity.y = input;
+            $('continueButton').style.opacity = 1;
+        }
+
+    }else{
+        if(event.target.id.at(-1)=='X'){
+
+            global.engine.world.gravity.x = 0;
+        }else{
+            global.engine.world.gravity.y = 0;
+
+        }
+    }
+
+
+}
+
+
+//Function 
+function explosionEffect(forceMagnitude = 0.03) {
+
+    Matter.Composite.allBodies(global.engine.world).forEach(body => {
+        // Generate random direction for the force
+        const angle = Math.random() * 2 * Math.PI;
+        const force = global.mj.Vector.create(
+            Math.cos(angle) * forceMagnitude,
+            Math.sin(angle) * forceMagnitude
+        );
+
+        // Apply the force to the body
+        global.mj.Body.applyForce(body, body.position, force);
+    });
+
+    // Optional: Play around with the engine for visual effects
+    global.mj.Engine.update(global.engine);
+}
+
+
+
+
+//Function: create balls
+function createBallPit(ballCount, colorRatio = 0.5, col='#ADDFFF') {
+    const screenWidth = window.innerWidth;
+    const screenHeight = window.innerHeight;
+
+    // Define some constants for ball size range
+    const minRadius = 10;
+    const maxRadius = 30;
+
+    // Loop to create balls
+    for (let i = 0; i < ballCount; i++) {
+        // Randomly choose radius between min and max
+        const radius = Math.random() * (maxRadius - minRadius) + minRadius;
+
+        // Randomly position the ball in the bottom half of the screen
+        const x = Math.random() * screenWidth;
+        const y = Math.random() * (screenHeight / 2) + (screenHeight / 2);
+
+        // Determine whether the ball will be solid or outlined
+        const isSolid = Math.random() < colorRatio; // Use the ratio to determine solid vs outlined
+        const color = isSolid ? col : 'transparent';
+        const strokeColor = isSolid ? 'transparent' : 'white';
+        const strokeWidth = isSolid ? 0 : 2; // Outline balls will have stroke width
+
+        // Create the ball body
+        const ball = global.mj.Bodies.circle(x, y, radius, {
+            restitution: 0.8, // Bounce effect
+            render: {
+                fillStyle: color,
+                strokeStyle: strokeColor,
+                lineWidth: strokeWidth
+            }
+        });
+
+        // Add the ball to the world
+        global.mj.World.add(global.engine.world, ball);
+    }
+}
+
+// Helper function to generate random color
+function getRandomColor() {
+    const letters = '0123456789ABCDEF';
+    let color = '#';
+    for (let i = 0; i < 6; i++) {
+        color += letters[Math.floor(Math.random() * 16)];
+    }
+    return color;
+}
+
+
+//Funtion: Render string text as physics objects.
+function addMatterText(text,x,y,size,bColor='#333',fColor='#ADDFFF',static=false){
+    //if this text is multiline, we split it up and render each line by itself.
+    if(text.includes('\n')){
+        var textPart = text.split('\n');
+        for(var i in textPart){
+            
+            //the size is *6 because we include an extra vertical space for the newline.
+            addMatterText(textPart[i],x,y+(size*6*i),size,bColor,fColor,static);
+        }
+
+        //remember to safe exit!
+        return;
+    }
+    //here are our lookup tables. I didn't go to the hassle of setting up a JSON object 
+    //because I didn't feel like it. Each char in the lookup corrisponds to a line in the letters,
+    //aside from the last one because it is a error char.
+    var lookup = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789.,!?~[]|/ '
+    //I had to write this by hand. I am literally DYING. Anyway, this is bottom-to-top representation,
+    //and the | seperates it in the x-axis.
+    var letters = 
+    ['xxx  | x x | x  x| x x |xxx  '// a
+    ,'xxxxx|x x x|x x x|x x x| x x '// b
+    ,' xxx |x   x|x   x|x   x|x   x'// c
+    ,'xxxxx|x   x|x   x|x   x| xxx '// d
+    ,'xxxxx|x x x|x x x|x   x|x   x'// e
+    ,'xxxxx|  x x|  x x|    x|    x'// f
+    ,' xxx |x   x|x   x|x x x|xxx x'// g
+    ,'xxxxx|  x  |  x  |  x  |xxxxx'// h
+    ,'x   x|x   x|xxxxx|x   x|x   x'// i
+    ,' x  x|x   x|x   x| xxxx|    x'// j
+    ,'xxxxx|  x  |  x  | x x |x   x'// k
+    ,'xxxxx|x    |x    |x    |x    '// l
+    ,'xxxxx|   x |  x  |   x |xxxxx'// m
+    ,'xxxxx|   x |  x  | x   |xxxxx'// n
+    ,' xxx |x   x|x   x|x   x| xxx '// o
+    ,'xxxxx|  x x|  x x|  x x|   x '// p
+    ,' xxx |x   x|x x x| x  x|x xx '// q
+    ,'xxxxx|  x x|  x x|  x x|xx x '// r
+    ,'x  x |x x x|x x x|x x x| x  x'// s
+    ,'    x|    x|xxxxx|    x|    x'// t
+    ,' xxxx|x    |x    |x    | xxxx'// u
+    ,'  xxx| x   |x    | x   |  xxx'// v
+    ,'xxxxx| x   |  x  | x   |xxxxx'// w
+    ,'x   x| x x |  x  | x x |x   x'// x
+    ,'    x|   x |xxx  |   x |    x'// y
+    ,'x   x|xx  x|x x x|x  xx|x   x'// z
+    ,' xxx |xx  x|x x x|x  xx| xxx '// 0
+    ,'     |x   x|xxxxx|x    |     '// 1
+    ,'xx  x|x x x|x x x|x x x|x  x '// 2
+    ,'x   x|x   x|x x x|x x x| x x '// 3
+    ,' xx  | x x | x  x|xxxxx| x   '// 4
+    ,'x xxx|x x x|x x x|x x x| x  x'// 5
+    ,' xxx |x x x|x x x|x x x| x  x'// 6
+    ,'    x|x   x| x  x|  x x|   xx'// 7
+    ,' x x |x x x|x x x|x x x| x x '// 8
+    ,'x  x |x x x|x x x|x x x| xxx '// 9
+    ,'     |x    |     |     |     '// . period
+    ,'     |x    | x   |     |     '// , comma 
+    ,'     |x xxx|     |     |     '// ! exclamation mark
+    ,'    x|x x x|   xx|     |     '// ? question mark
+    ,'  x  |   x |  x  | x   |  x  '// ~ tilde
+    ,'     |     |     |xxxxx|x   x'// [ open bracket
+    ,'x   x|xxxxx|     |     |     '// ] close bracket
+    ,'     |     |xxxxx|     |     '// | vertical bar
+    ,'x    | x   |  x  |   x |    x'// / slash
+    ,'     |     |     '            //   space
+    ,'xxxxx| x  x|xxxxx| x  x|xxxxx'// ! invalid
+    ]
+
+    // turn vertical bars into an array
+    letters = letters.map(e=>e.split('|'));
+
+
+
+    var data = [];
+    //we only have uppercase letters
+    text = text.toUpperCase();
+    for(var i of text){
+        // if include, then add. () is convereted to [].  Else, insert the invalid char.
+        if(lookup.includes(i)){
+            data.push(letters[lookup.indexOf(i)]);
+        }else{
+            if(i=='('){
+                data.push(letters.at(-5))
+            }else if(i==')'){
+                data.push(letters.at(-4))
+            }else{
+                data.push(letters.at(-1))
+            }
+        }
+        //add a little space between chars.
+        data.push(['     '])
+    }
+    //turn into 1d array
+    data = data.flat(1);
+    
+    //initialize rectangle
+    var rectArray = [];
+    for(var i in data){
+        for(var j = 0; j<5; j++){
+            //setup the attributes
+            var attrn = {
+                isStatic: static,
+                restitution: 1,
+                frictionAir: 0.05,
+                render: {
+                    fillStyle: (data[i][j]=='x'?fColor:bColor),
+                }
+            };
+            
+            //add rectangle to the array
+            rectArray.push(global.mj.Bodies.rectangle(x+i*size,y+(4-j)*size ,size ,size, attrn));
+        }
+    }
+
+    
+    //add array to sim
+    global.mj.World.add(global.engine.world,rectArray);
+};
+
+    </script>
+    
+</body></html>
